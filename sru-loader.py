@@ -127,43 +127,41 @@ def pathForID (ID, format):
 def storeBatches (collectedRecords, firstRecord):
 	global config
 
-	if 'xml-batch' in config.format:
-		XMLContainer = ET.XML('<records/>')
-		for (ID, record) in collectedRecords.iteritems():
-			XMLContainer.append(record)
-		filePath = pathForBatch(firstRecord, 'xml')
-		XMLFile = open(filePath, 'w')
-		XMLFile.write(ET.tostring(XMLContainer))
-		XMLFile.close()
-		print u"XML-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
+	if len(collectedRecords) > 0:
+		if 'xml-batch' in config.format:
+			XMLContainer = ET.XML('<records/>')
+			for (ID, record) in collectedRecords.iteritems():
+				XMLContainer.append(record)
+			filePath = pathForBatch(firstRecord, 'xml')
+			XMLFile = open(filePath, 'w')
+			XMLFile.write(ET.tostring(XMLContainer))
+			XMLFile.close()
+			print u"XML-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
 
 
-	if 'json-batch' in config.format or 'couchdb-batch' in config.format:
-		JSONContainer = []
-		for (ID, record) in collectedRecords.iteritems():
-			JSONInternal = elem_to_internal(record, strip=1)
-			if len(JSONInternal) == 1:
-				JSONInternal = JSONInternal.values()[0]
-			JSONInternal['_id'] = ID
-			JSONContainer += [JSONInternal]
+		if 'json-batch' in config.format or 'couchdb-batch' in config.format:
+			JSONContainer = []
+			for (ID, record) in collectedRecords.iteritems():
+				JSONInternal = elem_to_internal(record, strip=1)
+				if len(JSONInternal) == 1:
+					JSONInternal = JSONInternal.values()[0]
+				JSONInternal['_id'] = ID
+				JSONContainer += [JSONInternal]
 
-		if 'json-batch' in config.format:
-			filePath = pathForBatch(firstRecord, 'json')
-			JSONFile = open (filePath, "w")
-			JSONFile.write(simplejson.dumps(JSONContainer))
-			JSONFile.close()
-			print u"JSON-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
+			if 'json-batch' in config.format:
+				filePath = pathForBatch(firstRecord, 'json')
+				JSONFile = open (filePath, "w")
+				JSONFile.write(simplejson.dumps(JSONContainer))
+				JSONFile.close()
+				print u"JSON-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
 
-		if 'couchdb-batch' in config.format:
-			filePath = pathForBatch(firstRecord, 'couch.json')
-			JSONContainer = {'docs': JSONContainer}
-			JSONFile = open (filePath, "w")
-			JSONFile.write(simplejson.dumps(JSONContainer))
-			JSONFile.close()
-			print u"CouchDB JSON-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
-
-
-""" Create path for batch file. """
+			if 'couchdb-batch' in config.format:
+				filePath = pathForBatch(firstRecord, 'couch.json')
+				JSONContainer = {'docs': JSONContainer}
+				JSONFile = open (filePath, "w")
+				JSONFile.write(simplejson.dumps(JSONContainer))
+				JSONFile.close()
+				print u"CouchDB JSON-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
 def pathForBatch (firstRecord, format):
 	folderName = format + '-batch'
 	if not os.path.exists(folderName):
