@@ -2,8 +2,9 @@
 #coding=utf-8
 """
 	Script for downloading search results from an SRU interface.
-	https://github.com/ssp/sru-loader
+
 	2012 Sven-S. Porst, SUB Göttingen <porst@sub.uni-goettingen.de>
+	https://github.com/ssp/sru-loader
 """
 import sys
 import os
@@ -40,6 +41,12 @@ def main ():
 
 		XML = ET.fromstring(SRUResponse)
 		records = XML.findall('.//{http://www.loc.gov/zing/srw/}recordData/*')
+		numberOfRecords = XML.findall('.//{http://www.loc.gov/zing/srw/}numberOfRecords')
+		resultCount = 0
+		if len(numberOfRecords) > 0:
+			resultCount = int(numberOfRecords[0].text)
+
+		print u"Loaded " + str(len(records)) + " records: " + str(recordCount) + "-" + str(min(recordCount + config.chunksize, resultCount)) + " of " + str(resultCount)
 
 		collectedRecords = {}
 		for record in records:
