@@ -2,7 +2,7 @@
 #coding=utf-8
 """
 	Script for downloading search results from an SRU interface.
-
+	https://github.com/ssp/sru-loader
 	2012 Sven-S. Porst, SUB Göttingen <porst@sub.uni-goettingen.de>
 """
 import sys
@@ -11,6 +11,7 @@ import argparse
 import urllib
 from lxml import etree as ET
 import simplejson
+
 
 
 def main ():
@@ -59,6 +60,7 @@ def main ():
 		storeBatches(collectedRecords, firstRecord)
 
 		done = (len(records) == 0)
+
 
 
 
@@ -162,6 +164,11 @@ def storeBatches (collectedRecords, firstRecord):
 				JSONFile.write(simplejson.dumps(JSONContainer))
 				JSONFile.close()
 				print u"CouchDB JSON-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
+
+
+
+
+""" Create paths for batch files. """
 def pathForBatch (firstRecord, format):
 	folderName = format + '-batch'
 	if not os.path.exists(folderName):
@@ -172,7 +179,7 @@ def pathForBatch (firstRecord, format):
 
 
 
-""" Determine the record’s ID use the record count if we cannot find one. """
+""" Determine the record’s ID. Use the record count if we cannot find one. """
 def recordID (record, recordCount):
 	global config
 
@@ -187,7 +194,8 @@ def recordID (record, recordCount):
 
 
 
-""" Parse arguments from the command line. """
+
+""" Parse command line arguments. """
 def parseArguments ():
 	parser = argparse.ArgumentParser(description='Download SRU results.')
 	parser.add_argument('--url', help='URL of SRU interface', required=True)
@@ -208,6 +216,7 @@ def parseArguments ():
 
 
 
+
 """ Load stylesheets and place them into config. """
 def loadXSLs ():
 	config.XSLs = []
@@ -219,6 +228,7 @@ def loadXSLs ():
 			config.XSLs += [XSL]
 		except:
 			sys.stderr.write(u"Could not read XSLT at »" + XSLPath + u"«, ignoring it.\n")
+
 
 
 
@@ -267,8 +277,6 @@ def elem_to_internal(elem, strip=1):
 		# text is the value if no attributes
 		d = text or None
 	return {elem.tag: d}
-
-
 
 
 
