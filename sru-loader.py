@@ -215,7 +215,8 @@ def parseArguments ():
 	defaultIDPaths = ['./{http://www.loc.gov/MARC21/slim}controlfield[@tag="001"]', \
 						'./controlfield[@tag="001"]', \
 						'./{http://www.indexdata.com/turbomarc}c001', \
-						'./{info:srw/schema/5/picaXML-v1.0}datafield[@tag="003@"]/{info:srw/schema/5/picaXML-v1.0}subfield[@code="0"]']
+						'./{info:srw/schema/5/picaXML-v1.0}datafield[@tag="003@"]/{info:srw/schema/5/picaXML-v1.0}subfield[@code="0"]', \
+						'./datafield[@tag="003@"]/subfield[@code="0"]']
 	parser.add_argument('--idxpath', help='XPath to get the record ID from, for use as the file name, the record number is used if it is blank', action='append', default=defaultIDPaths)
 	parser.add_argument('query', help='CQL query')
 
