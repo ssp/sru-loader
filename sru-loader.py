@@ -58,7 +58,7 @@ def main ():
 
 			if record is None:
 				print u"Record transformation failed for ID »" + ID + u"«"
-				print ET.tostring(record)
+				print ET.tounicode(record)
 			else:
 				storeRecordWithID(record, ID, collectedRecords)
 
@@ -83,7 +83,7 @@ def storeRecordWithID (record, ID, collectedRecords):
 	if 'xml' in config.format:
 		filePath = pathForID(ID, 'xml')
 		XMLFile = open(filePath, 'w')
-		XMLFile.write(ET.tostring(record))
+		XMLFile.write(ET.tounicode(record))
 		XMLFile.close()
 		sys.stdout.write(' ./' + filePath)
 
@@ -101,7 +101,7 @@ def storeRecordWithID (record, ID, collectedRecords):
 
 	""" If no format is given, print the record. """
 	if len(config.format) == 0:
-		print ET.tostring(record)
+		print ET.tounicode(record)
 
 	print ""
 
@@ -143,7 +143,7 @@ def storeBatches (collectedRecords, firstRecord):
 				XMLContainer.append(record)
 			filePath = pathForBatch(firstRecord, 'xml')
 			XMLFile = open(filePath, 'w')
-			XMLFile.write(ET.tostring(XMLContainer))
+			XMLFile.write(ET.tounicode(XMLContainer))
 			XMLFile.close()
 			print u"XML-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
 
