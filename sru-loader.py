@@ -83,7 +83,8 @@ def storeRecordWithID (record, ID, collectedRecords):
 	if 'xml' in config.format:
 		filePath = pathForID(ID, 'xml')
 		XMLFile = open(filePath, 'w')
-		XMLFile.write(ET.tounicode(record))
+		XMLString = ET.tounicode(record).encode('UTF-8')
+		XMLFile.write(XMLString)
 		XMLFile.close()
 		sys.stdout.write(' ./' + filePath)
 
@@ -143,7 +144,8 @@ def storeBatches (collectedRecords, firstRecord):
 				XMLContainer.append(record)
 			filePath = pathForBatch(firstRecord, 'xml')
 			XMLFile = open(filePath, 'w')
-			XMLFile.write(ET.tounicode(XMLContainer))
+			XMLString = ET.tounicode(XMLContainer).encode('UTF-8')
+			XMLFile.write(XMLString)
 			XMLFile.close()
 			print u"XML-Batch: " + str(len(collectedRecords)) + u" records to »" + filePath + u"«"
 
@@ -190,7 +192,7 @@ def pathForBatch (firstRecord, format):
 def recordID (record, recordCount):
 	global config
 
-	ID = recordCount
+	ID = '%06d' % recordCount
 	for IDPath in config.idxpath:
 		IDs = record.findall(IDPath)
 		if len(IDs) > 0:
