@@ -66,7 +66,7 @@ def main ():
 
 		storeBatches(collectedRecords, firstRecord)
 
-		done = (len(records) == 0)
+		done = (len(records) == 0 or recordCount > resultCount)
 
 
 
